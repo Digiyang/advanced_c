@@ -1,0 +1,86 @@
+use "static" for global variables if you don't want another file to access it, and only specific to the file declared in it.
+There are 3 forms of memory that you can use in your program:
+    static: static memory persists throughout the entire life of the program
+        usually used to store things like global variables, or variables created with the static clause.
+    stack: is a special region of memory that stores temporary variables
+        used to store variables that are created inside of a function.
+        easier to keep track of because the memory is only locally available in the function.
+        The stack is a "LIFO"(last in, first out) data structure that is managed and optimized by the cpu
+            a linear data structure
+            there is no need to manage the memory yourself
+                variables are allocated and freed automatically
+        the stack grows and shrinks as variables are created and destroyed inside a function
+            every time a function declares a new variable, it is pushed onto the stack
+            every time a function exits, all of the variables pushed onto the stack by that function, are freed
+            once a stack variable is freed, that region of memory becomes available for other stack variables
+        there is a limit on the size of variables that can be stored on the stack
+        if a program tries to put too much information on the stack, stack overflow will occur
+            happens when all the memory in the stack has been allocated, and further allocations begin overflowing into other sections of memory
+            stack overflow also occurs in situations where recursion is incorrectly used
+        stack memory is divided into successive frames where each time a function is called, it allocates itself a fresh stack frames
+        a key to understanding the stack is the notion that when a function exits, all of its variables are popped off the stack
+            thus stack variables are local in nature
+        stack variables only exist while the function that created them is running
+        a common bug is attempting to access a variable that was created on the stack inside some function, from a place in your program outside of that function(i.e. after that function has existed)
+    heap:
+        opposite of the stack
+        a hierarchical data structure
+        the heap is a large pool of memory that can be used dynamically
+        memory is not automatically managed
+            more free-floating region of memory
+        the heap is managed by the programmer
+            the memory is accessed through the use of pointers
+                you have to explicitly allocate(malloc) and deallocate(free)the memory
+                failure to free the memory when you are finished with it will result in memory leaks
+                    memory that is still "being used", and not available to other processes
+        there are generally no restrictions on the size of the heap(or the variables it creates)
+            other than the physical size of memory in the machine(RAM)
+        variables created on the heap are accessible anywhere in the program 
+            essentially global in scope
+        heap memory is slightly slower to be read from and written to
+When should I use the heap or stack?
+    use the heap
+        when you need to allocate a large block of memory
+            a large array
+            a big structure
+        when you need to keep that variable around a long time
+            a global
+        when you need variables
+    use the stack
+        when you are dealing with relatively small variables that only need to persist as long as the function using them is alive
+            easier and faster
+
+Storage class:
+    Auto: is used to declare variables of automatic Storage duration
+        created when the block in which there are defined is entered
+        exist while the block is active
+        destroyed when the block is exited
+    Extern: tells us that a variable is defined elsewhere
+                not within the same block where it is used
+        an extern variable is a global variable initialized with a legal value where it is declared in order to be used elsewhere
+            an extension to the concept of the global variable
+        the main purpose of using extern variables is that they can be accessed between two different files which are part of a large program
+            functions contained in separate files can communicate through external variables
+        the extern storage class is used to give a reference of a global variable that is visible to ALL the program files
+        inside the module that wants to access the external variable
+    Static: can be used on local and global variables, as well as functions
+            when applied to local variables it instructs the compiler to keep the variable in existence during the life-time of the program
+            when applied to global variables, the static modifier causes that variable's scope to be restricted to the file in which it is declared
+            when applied to functions, the static function can be called only from within the same file as the function appears
+            static variables are allocated memory on the heap, not on the stack
+            static variables should not be declared inside a structure
+    Register: a processor register (CPU register) is one of a small set of data holding places that are part of the computer processor
+                a register may hold an instruction, a storage address, or any kind of data
+            the register storage class is used to define local variables that should be stored in a register instead of RAM memory
+                makes the use of register variables to be much faster that that of the variables stored in the memory during the runtime of the program
+            the register storage class should only be used for variables that require quick access
+                the variables which are most frequently used in a C program
+                if a function uses a particular variable heavily
+            the keyword register hints to the compiler that a given variable can be put in a register
+                it is the compiler's choice to put it in a register or not
+                MIGHT be stored in a register depending on hardware and implementation restrictions
+                generally, compilers themselves do optimizations and put the variables in register
+            the variable stored in a register has a maximum size equal to the register size
+            you cannot obtain the address of a register variable using pointers
+                cannot have the unary '&' operator applied to it(as it does not have a memory location)
+    
