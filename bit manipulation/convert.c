@@ -6,10 +6,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
-
-int convertBinaryToDecimal(long long bin);
-long long convertDecimalToBinary(int n);
-
+#include"convert.h"
 
 int convertBinaryToDecimal(long long bin) 
 {
@@ -29,36 +26,32 @@ int convertBinaryToDecimal(long long bin)
 
 long long convertDecimalToBinary(int n)
 {
-    int i = 0;
-    long long binary, *ptr;
-    ptr = (long long *) malloc(sizeof(long long)*n);
-    while (n > 0)
+    int i = 1, reminder;
+    long long binary = 0;
+    while (n != 0)
     {
-        ptr[i] = n % 2;
+        reminder = n % 2;
         n = n / 2;
-        ++i;
+        binary += reminder * i;
+        i = i * 10;
     }
-    printf("Binary number is: \n");
-    for(i = i-1; i>=0; --i)
-    {
-        printf("%lld", ptr[i]);
-    }
-    printf("\n");
-    return *ptr;
+    return binary;
 }
 
-int main()
+/*int main()
 {
     long long binary;
     printf("Input your binary number: \n");
     scanf("%lld", &binary);
     int finalDecimal = convertBinaryToDecimal(binary);
-    printf("Decimal number is: \n%i\n\n", finalDecimal);
+    printf("Decimal number of \"%lld\" is: \n%d\n\n", binary,finalDecimal);
 
     int decimalNumber;
+    long long finalBinary = 0;
     printf("Input your decimal number: \n");
     scanf("%d", &decimalNumber);
-    convertDecimalToBinary(decimalNumber);
+    finalBinary = convertDecimalToBinary(decimalNumber);
+    printf("Binary number of \"%d\" is: \n%lld\n", decimalNumber, finalBinary);
 
     return 0;
-}
+}*/
